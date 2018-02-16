@@ -86,17 +86,83 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
+
     "*** YOUR CODE HERE ***"
+    # set start state
+
+    # create list for visited states
+
+    # add start state to list of visited states
+
+    # create stack for states
+
+    # add start state to stack
+
+    # loop through states while it is not the goal state and the stack is not empty 
+
+    # pop state from stack and add it to list of visited states
+
+    # get the successors of popped state
+
+    # for each successor, get coordinates and direction
+
+    # return actions with direction
+ 
+    
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    # set start state
+    
+    # create list for visited states
+
+    # add start state to list of visited states
+
+    # create queue for states
+
+    # add start state to queue
+
+    # loop through list while it isn't empty
+
+    # pop state, return if goal state 
+
+    # get successors of popped state
+
+    # for each successor, get coordinates and directions
+
+    # add coordinates to visited states
+
+    # return actions
+
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    # set start state 
+
+    # create list of visited states
+
+    # create priority queue for states
+
+    # add start state to priority queue
+
+    # loop through list while it isn't empty 
+
+    # pop state, return if goal state
+
+    # if state isn't in visited states, get it's successors 
+
+    # for each successor, get coordinates and directions
+
+    # add coordinates to visited states
+
+    # return actions
+
+    
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -109,6 +175,29 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    # get start state
+
+    # create list of visited states
+
+    # create a priority queue for states 
+
+    # add start state w/ heuristic to priority queue
+
+    # loop through list while it isn't empty 
+
+    # pop state, return if goal state 
+
+    # if state isn't in visited states, get it's successors 
+
+    # for each successor, get coordinates, directions, and cost
+
+    # add to states
+
+    # add state to visited states 
+
+    # return actions
+
+
     util.raiseNotDefined()
 
 

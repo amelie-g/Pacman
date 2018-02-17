@@ -72,6 +72,7 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -100,13 +101,15 @@ def depthFirstSearch(problem):
     # add start state to stack
     stack.push((root, []))
 
+    # initialize current state and empty list for actions
     cur_state = None
     game_list = []
+
     # loop through states while it is not the goal state and the stack is not empty 
     while not stack.isEmpty() and not problem.isGoalState(cur_state):
+
         # pop state from stack and add it to list of visited states
         cur_state, game_list = stack.pop()
-
         visitedNodes.add(cur_state)
 
         # get the successors of popped state
@@ -121,7 +124,7 @@ def depthFirstSearch(problem):
                 # add each child to the stack
                 stack.push((coor, game_list + [d]))
 
-    # return actions with direction
+    # return list of actions
     return game_list
 
 
@@ -140,12 +143,14 @@ def breadthFirstSearch(problem):
     # add start state to queue
     queue.push((root, []))
 
+    # initialize current state and empty list for actions
     cur_state = None
     game_list = []
 
-    # loop through list while it isn't empty
+    # loop through list while it isn't empty and while it's not the goal state
     while not queue.isEmpty() and not problem.isGoalState(cur_state):
-        # pop state, return if goal state
+
+        # pop state and add it to list of visited states
         cur_state, game_list = queue.pop()
         visitedNodes.append(cur_state)
 
@@ -157,9 +162,13 @@ def breadthFirstSearch(problem):
             coor = child[0]
             if not coor in visitedNodes:
                 d = child[1]
+                # add successors to list of visited states
                 visitedNodes.append(coor)
+                # add each child to the queue
                 queue.push((coor, game_list + [d]))
+    # return list of actions
     return game_list
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
@@ -172,18 +181,21 @@ def uniformCostSearch(problem):
 
     # create priority queue for states
     priorityQ = util.PriorityQueue()
-    cost = 0
-    # add start state to priority queue
 
+    # initialize cost as zero
+    cost = 0
+
+    # add start state to priority queue
     priorityQ.push((root, [], cost), cost)
 
+    # initialize current state and empty list for actions
     cur_state = None
     game_list = []
 
-    # loop through list while it isn't empty 
+    # loop through list while it isn't empty and while it's not the goal state
     while not priorityQ.isEmpty() and not problem.isGoalState(cur_state):
 
-        # pop state, set cost
+        # pop state and add it to list of visited states
         cur_state, game_list, cost = priorityQ.pop()
         visitedNodes.append(cur_state)
 
@@ -193,12 +205,15 @@ def uniformCostSearch(problem):
             # add coordinates to visited states
             coor = child[0]
             if not coor in visitedNodes:
+                # set direction, successor cost, and total cost
                 d = child[1]
                 child_cost = child[2]
                 total_cost = cost + child_cost
+                # add each child to the priority queue
                 priorityQ.push((coor, game_list + [d], total_cost), total_cost)
-
+    # return list of actions
     return game_list
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -206,6 +221,7 @@ def nullHeuristic(state, problem=None):
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
+
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
@@ -216,47 +232,52 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     # create list of visited states
     closedNodes = set()
 
+    # initialize map to keep track of distances
     g = {}
     g[root] = 0
+
     # create a priority queue for states 
     openNodes = util.PriorityQueue()
 
     # add start state w/ heuristic to priority queue
-    # openNodes contains:
-    # ((state, game_list, cost), h_score)
+    # openNodes contains: ((state, game_list, cost), h_score)
     openNodes.push((root, [], 0), 0)
 
+    # initialize current state and an empty list for actions
     cur_state = None
     game_list = []
 
-    # loop through list while it isn't empty 
+    # loop through list while it isn't empty and while it's not the goal state
     while not openNodes.isEmpty() and not problem.isGoalState(cur_state):
-        # get node with lowest heuristic cost
-        cur_state, game_list, cost = openNodes.pop()
 
-        # visit node
+        # pop node with lowest heuristic cost and add it to list of visited states
+        cur_state, game_list, cost = openNodes.pop()
         closedNodes.add(cur_state)
 
+        # get the successors of popped state
         children = problem.getSuccessors(cur_state)
 
         # for each successor, get coordinates, directions, and cost
         for child in children:
             coor = child[0]
             if not coor in closedNodes:
-
                 d = child[1]
                 child_cost = child[2]
 
-                # check if dist from start to cur + cur to child is more than
-                # distance from start to child. If so, then continue
+                # check if distance from (start to current + current to child) is more than
+                # distance from start to child. If so, then continue because it's not the best path.
                 tentative = g[cur_state] + child_cost
                 if coor in g and g[coor] < tentative:
                     continue
 
                 g[coor] = tentative
+                # add heuristic score to total travel distance from start
                 h_score = g[coor] + heuristic(coor, problem)
+                # add each child to the priority queue
                 openNodes.push((coor, game_list + [d], child_cost), h_score)
+    # return list of actions
     return game_list
+
 
 # Abbreviations
 bfs = breadthFirstSearch

@@ -133,13 +133,11 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     # set start state
     root = problem.getStartState()
-    
-    # create list for visited states
-    visitedNodes = []
 
     # create queue for states
     queue = util.Queue()
 
+    visited_states = []
     # add start state to queue
     queue.push((root, []))
 
@@ -152,7 +150,6 @@ def breadthFirstSearch(problem):
 
         # pop state and add it to list of visited states
         cur_state, game_list = queue.pop()
-        visitedNodes.append(cur_state)
 
         # get successors of popped state
         children = problem.getSuccessors(cur_state)
@@ -161,10 +158,11 @@ def breadthFirstSearch(problem):
         for child in children:
             coor = child[0]
 
-            if not coor in visitedNodes:
-                d = child[1]
+            d = child[1]
+            if coor not in visited_states:
                 # add successors to list of visited states
-                #visitedNodes.append(coor)
+                visited_states.append(coor)
+
                 # add each child to the queue
                 queue.push((coor, game_list + [d]))
     # return list of actions

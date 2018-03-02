@@ -160,10 +160,11 @@ def breadthFirstSearch(problem):
         # for each successor, get coordinates and directions
         for child in children:
             coor = child[0]
+
             if not coor in visitedNodes:
                 d = child[1]
                 # add successors to list of visited states
-                visitedNodes.append(coor)
+                #visitedNodes.append(coor)
                 # add each child to the queue
                 queue.push((coor, game_list + [d]))
     # return list of actions

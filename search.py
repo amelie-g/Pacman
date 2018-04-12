@@ -105,11 +105,15 @@ def depthFirstSearch(problem):
     cur_state = None
     game_list = []
 
-    # loop through states while it is not the goal state and the stack is not empty 
+    # loop through states while it is not the goal state and the stack is not empty
     while not stack.isEmpty() and not problem.isGoalState(cur_state):
 
         # pop state from stack and add it to list of visited states
         cur_state, game_list = stack.pop()
+
+        if problem.isGoalState(cur_state):
+            break
+
         visitedNodes.add(cur_state)
 
         # get the successors of popped state
@@ -140,16 +144,18 @@ def breadthFirstSearch(problem):
     visited_states = []
     # add start state to queue
     queue.push((root, []))
-
+    visited_states.append(root)
     # initialize current state and empty list for actions
     cur_state = None
     game_list = []
 
     # loop through list while it isn't empty and while it's not the goal state
     while not queue.isEmpty() and not problem.isGoalState(cur_state):
-
         # pop state and add it to list of visited states
         cur_state, game_list = queue.pop()
+
+        if problem.isGoalState(cur_state):
+            break
 
         # get successors of popped state
         children = problem.getSuccessors(cur_state)
@@ -165,6 +171,7 @@ def breadthFirstSearch(problem):
 
                 # add each child to the queue
                 queue.push((coor, game_list + [d]))
+
     # return list of actions
     return game_list
 
@@ -175,6 +182,7 @@ def uniformCostSearch(problem):
     # set start state
     root = problem.getStartState()
 
+    calledSet = set()
     # create list of visited states
     visitedNodes = []
 
@@ -186,9 +194,9 @@ def uniformCostSearch(problem):
 
     # add start state to priority queue
     priorityQ.push((root, [], cost), cost)
-
+    visitedNodes.append(root)
     # initialize current state and empty list for actions
-    cur_state = None
+    cur_state = root
     game_list = []
 
     # loop through list while it isn't empty and while it's not the goal state
@@ -197,19 +205,29 @@ def uniformCostSearch(problem):
         # pop state and add it to list of visited states
         cur_state, game_list, cost = priorityQ.pop()
         visitedNodes.append(cur_state)
+        if problem.isGoalState(cur_state):
+            break
 
-        # for each successor, get coordinates and directions
-        children = problem.getSuccessors(cur_state)
+        if cur_state not in calledSet:
+            # for each successor, get coordinates and directions
+            children = problem.getSuccessors(cur_state)
+            calledSet.add(cur_state)
+        else:
+            continue
+
         for child in children:
             # add coordinates to visited states
             coor = child[0]
+
             if not coor in visitedNodes:
                 # set direction, successor cost, and total cost
                 d = child[1]
                 child_cost = child[2]
                 total_cost = cost + child_cost
                 # add each child to the priority queue
-                priorityQ.push((coor, game_list + [d], total_cost), total_cost)
+                tuple = (coor, game_list + [d], total_cost)
+                priorityQ.push(tuple, total_cost)
+
     # return list of actions
     return game_list
 
@@ -235,7 +253,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     g = {}
     g[root] = 0
 
-    # create a priority queue for states 
+    # create a priority queue for states
     openNodes = util.PriorityQueue()
 
     # add start state w/ heuristic to priority queue
@@ -246,11 +264,18 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     cur_state = None
     game_list = []
 
+    if problem.isGoalState(cur_state):
+        return
+
     # loop through list while it isn't empty and while it's not the goal state
     while not openNodes.isEmpty() and not problem.isGoalState(cur_state):
 
         # pop node with lowest heuristic cost and add it to list of visited states
         cur_state, game_list, cost = openNodes.pop()
+
+        if problem.isGoalState(cur_state):
+            break
+
         closedNodes.add(cur_state)
 
         # get the successors of popped state
